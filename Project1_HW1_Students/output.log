@@ -1,0 +1,404 @@
+
+################################################################################
+# RUN: 2026-04-14T22:10:43.887864
+# Python: 3.12.4
+################################################################################
+======================================================================
+COMPREHENSIVE DATA QUALITY ANALYSIS
+Comparing Programmatic vs LLM Cleaning Methods
+======================================================================
+
+Loading original data...
+  ERROR: load_and_examine_data returned None — check Section 2.
+
+################################################################################
+# END OF RUN
+################################################################################
+
+
+################################################################################
+# RUN: 2026-04-14T22:19:32.929859
+# Python: 3.12.4
+################################################################################
+======================================================================
+COMPREHENSIVE DATA QUALITY ANALYSIS
+Comparing Programmatic vs LLM Cleaning Methods
+======================================================================
+
+Loading original data...
+  ERROR: load_and_examine_data returned None — check Section 2.
+
+################################################################################
+# END OF RUN
+################################################################################
+
+
+################################################################################
+# RUN: 2026-04-14T22:23:21.281121
+# Python: 3.12.4
+################################################################################
+======================================================================
+COMPREHENSIVE DATA QUALITY ANALYSIS
+Comparing Programmatic vs LLM Cleaning Methods
+======================================================================
+
+Loading original data...
+  27 rows × 13 columns loaded from health_dataset.csv
+
+Running LLM cleaning...
+  ERROR: LLM cleaning failed — check Section 4.
+
+################################################################################
+# END OF RUN
+################################################################################
+
+
+################################################################################
+# RUN: 2026-04-14T22:29:28.024707
+# Python: 3.12.4
+################################################################################
+======================================================================
+COMPREHENSIVE DATA QUALITY ANALYSIS
+Comparing Programmatic vs LLM Cleaning Methods
+======================================================================
+
+Loading original data...
+  27 rows × 13 columns loaded from health_dataset.csv
+
+Running LLM cleaning...
+  ERROR: LLM cleaning failed — check Section 4.
+
+################################################################################
+# END OF RUN
+################################################################################
+
+
+################################################################################
+# RUN: 2026-04-14T22:43:07.900840
+# Python: 3.12.4
+################################################################################
+======================================================================
+COMPREHENSIVE DATA QUALITY ANALYSIS
+Comparing Programmatic vs LLM Cleaning Methods
+======================================================================
+
+Loading original data...
+  27 rows × 13 columns loaded from health_dataset.csv
+
+Running LLM cleaning...
+LLM cleaning failed: 'ascii' codec can't encode character '\u0441' in position 16: ordinal not in range(128)
+  ERROR: LLM cleaning failed — check Section 4.
+
+################################################################################
+# END OF RUN
+################################################################################
+
+
+################################################################################
+# RUN: 2026-04-14T22:49:06.132938
+# Python: 3.12.4
+################################################################################
+======================================================================
+COMPREHENSIVE DATA QUALITY ANALYSIS
+Comparing Programmatic vs LLM Cleaning Methods
+======================================================================
+
+Loading original data...
+  27 rows × 13 columns loaded from health_dataset.csv
+
+Running LLM cleaning...
+  Done.  27 rows → 15 rows (12 removed, 44.4%)
+
+Running programmatic cleaning...
+  Done.  27 rows → 17 rows (10 removed, 37.0%)
+
+Running programmatic analysis on all three datasets...
+  Done.
+
+======================================================================
+DETAILED PER-DATASET ANALYSIS  (for reference / log)
+======================================================================
+
+======================================================================
+PROGRAMMATIC STATISTICAL ANALYSIS: ORIGINAL DATA
+======================================================================
+
+Dataset shape: 27 rows × 13 columns
+
+--- MISSING VALUE DETECTION ---
+Null Nan:
+  - age: 1
+  - gender: 1
+  - weight_kg: 1
+  - height_cm: 1
+  - cholesterol: 4
+  - smoking_status: 1
+  - bmi: 1
+  - date_of_birth: 3
+String Na:
+  - age: 1
+  - cholesterol: 1
+String Null:
+  - weight_kg: 1
+String Missing:
+  - systolic_bp: 1
+
+TOTAL MISSING: 17 (4.8%)
+
+--- OUTLIER DETECTION ---
+diastolic_bp: 1 outlier(s) — [300]
+bmi: 1 outlier(s) — [999.9]
+
+--- INVALID / IMPOSSIBLE VALUES ---
+cholesterol:
+  negative_values: count=1, values=['-50']
+age:
+  unrealistic_age: count=1, values=['999']
+weight_kg:
+  unrealistic_weight: count=2, values=['750.2', '682']
+diastolic_bp:
+  unrealistic_diastolic_bp: count=1, values=[300]
+
+--- DATA TYPE INCONSISTENCIES ---
+age: ['should_be_numeric', 'mixed_types']
+gender: ['mixed_types']
+weight_kg: ['should_be_numeric', 'mixed_types']
+systolic_bp: ['should_be_numeric', 'float_notation_mix']
+cholesterol: ['should_be_numeric', 'mixed_types']
+smoking_status: ['mixed_types']
+diabetes: ['should_be_numeric']
+date_of_birth: ['mixed_types']
+
+--- FORMATTING INCONSISTENCIES ---
+gender case variations:
+  'm' appears as: ['M', 'm']
+  'f' appears as: ['F', 'f']
+  'male' appears as: ['male', 'Male']
+  'female' appears as: ['Female', 'female']
+smoking_status case variations:
+  'never' appears as: ['Never', 'never']
+  'former' appears as: ['Former', 'former']
+  'current' appears as: ['Current', 'current']
+
+--- DUPLICATE DETECTION ---
+Exact duplicate rows: 0
+  P003: 2 times (rows [2, 25])
+  P007: 2 times (rows [6, 26])
+
+--- CROSS-FIELD CONSISTENCY (BMI) ---
+BMI/weight/height mismatches: 2 row(s)
+  P008: weight=750.2, height=170.0, bmi_given=26.1, bmi_calc=259.58, delta=233.48
+  P022: weight=682, height=165.0, bmi_given=25.1, bmi_calc=250.51, delta=225.41
+
+--- DATE / AGE INTEGRITY ---
+Date/age mismatches: 3 row(s)
+  P005: age_recorded=34, age_from_dates=49.0, delta=15.0 yrs
+  P011: age_recorded=25, age_from_dates=37.0, delta=12.0 yrs
+  P019: age_recorded=36, age_from_dates=54.0, delta=18.0 yrs
+
+--- MNAR: STRUCTURED MISSINGNESS ---
+MNAR patterns: 2 finding(s)
+  'cholesterol' ~ 'diabetes': test=fisher, p=0.005723, rates={'0': np.float64(0.0), '1': np.float64(0.455)}
+  'cholesterol' ~ 'age_group(>50_vs_≤50)': test=fisher, p=2.4e-05, rates={'>50': np.float64(1.0), '≤50': np.float64(0.0)}
+
+--- SUMMARY ---
+  Missing values               17
+  Outliers                     2
+  Invalid values               5
+  Type issues (columns)        8
+  Formatting issues (cols)     2
+  Duplicate IDs                2
+  Cross-field issues           2
+  Date/age violations          3
+  MNAR patterns                2
+
+
+======================================================================
+PROGRAMMATIC STATISTICAL ANALYSIS: PROG-CLEANED DATA
+======================================================================
+
+Dataset shape: 17 rows × 13 columns
+
+--- MISSING VALUE DETECTION ---
+Null Nan:
+  - cholesterol: 4
+  - date_of_birth: 1
+
+TOTAL MISSING: 5 (2.3%)
+
+--- OUTLIER DETECTION ---
+No outliers detected
+
+--- INVALID / IMPOSSIBLE VALUES ---
+No invalid values detected
+
+--- DATA TYPE INCONSISTENCIES ---
+date_of_birth: ['mixed_types']
+
+--- FORMATTING INCONSISTENCIES ---
+No formatting inconsistencies detected
+
+--- DUPLICATE DETECTION ---
+Exact duplicate rows: 0
+No duplicate IDs found
+
+--- CROSS-FIELD CONSISTENCY (BMI) ---
+No cross-field inconsistencies detected
+
+--- DATE / AGE INTEGRITY ---
+No date/age integrity violations detected
+
+--- MNAR: STRUCTURED MISSINGNESS ---
+MNAR patterns: 1 finding(s)
+  'cholesterol' ~ 'age_group(>50_vs_≤50)': test=fisher, p=0.00042, rates={'>50': np.float64(1.0), '≤50': np.float64(0.0)}
+
+--- SUMMARY ---
+  Missing values               5
+  Outliers                     0
+  Invalid values               0
+  Type issues (columns)        1
+  Formatting issues (cols)     0
+  Duplicate IDs                0
+  Cross-field issues           0
+  Date/age violations          0
+  MNAR patterns                1
+
+
+======================================================================
+PROGRAMMATIC STATISTICAL ANALYSIS: LLM-CLEANED DATA
+======================================================================
+
+Dataset shape: 15 rows × 13 columns
+
+--- MISSING VALUE DETECTION ---
+Null Nan:
+  - cholesterol: 2
+
+TOTAL MISSING: 2 (1.0%)
+
+--- OUTLIER DETECTION ---
+age: 1 outlier(s) — [67]
+
+--- INVALID / IMPOSSIBLE VALUES ---
+No invalid values detected
+
+--- DATA TYPE INCONSISTENCIES ---
+No data type inconsistencies detected
+
+--- FORMATTING INCONSISTENCIES ---
+No formatting inconsistencies detected
+
+--- DUPLICATE DETECTION ---
+Exact duplicate rows: 0
+No duplicate IDs found
+
+--- CROSS-FIELD CONSISTENCY (BMI) ---
+No cross-field inconsistencies detected
+
+--- DATE / AGE INTEGRITY ---
+Date/age mismatches: 3 row(s)
+  P005: age_recorded=34, age_from_dates=49.0, delta=15.0 yrs
+  P011: age_recorded=25, age_from_dates=37.0, delta=12.0 yrs
+  P019: age_recorded=36, age_from_dates=54.0, delta=18.0 yrs
+
+--- MNAR: STRUCTURED MISSINGNESS ---
+MNAR patterns: 1 finding(s)
+  'cholesterol' ~ 'age_group(>50_vs_≤50)': test=fisher, p=0.009524, rates={'>50': np.float64(1.0), '≤50': np.float64(0.0)}
+
+--- SUMMARY ---
+  Missing values               2
+  Outliers                     1
+  Invalid values               0
+  Type issues (columns)        0
+  Formatting issues (cols)     0
+  Duplicate IDs                0
+  Cross-field issues           0
+  Date/age violations          3
+  MNAR patterns                1
+
+
+======================================================================
+STEP 1 — ACTUAL DATA CONCERNS  (original data, programmatic)
+======================================================================
+  Issue Category                    Count
+  ------------------------------------------
+  Rows                                 27
+  ------------------------------------------
+  Missing values                       17
+  Outliers (IQR)                        2
+  Invalid values                        5
+  Type inconsistencies                  8
+  Formatting issues                     2
+  Duplicate IDs                         2
+  Cross-field (BMI)                     2
+  Date/age violations                   3
+  MNAR patterns                         2
+
+======================================================================
+STEP 2 — THREE-WAY DATA QUALITY COMPARISON
+======================================================================
+  Issue Category             ORIGINAL     PROG-CLEANED    LLM-CLEANED
+  ----------------------------------------------------------------------
+  Rows                             27               17             15
+  ----------------------------------------------------------------------
+  Missing values                   17                5              2
+  Outliers (IQR)                    2                0              1 ← LLM missed
+  Invalid values                    5                0              0
+  Type inconsistencies              8                1              0
+  Formatting issues                 2                0              0
+  Duplicate IDs                     2                0              0
+  Cross-field (BMI)                 2                0              0
+  Date/age violations               3                0              3 ← LLM missed
+  MNAR patterns                     2                1              1
+  ----------------------------------------------------------------------
+
+======================================================================
+STEP 3 — WHAT THE LLM MISSED
+======================================================================
+  ✗ Outliers (IQR): 1 remaining (programmatic cleaned to 0)
+  ✗ Date/age violations: 3 remaining (programmatic cleaned to 0)
+
+======================================================================
+STEP 4 — CLEANING ACTION LOG
+======================================================================
+
+  Programmatic cleaning  (10 rows removed from 27):
+    age: 1 string sentinel(s) → NaN
+    weight_kg: 1 string sentinel(s) → NaN
+    systolic_bp: 1 string sentinel(s) → NaN
+    cholesterol: 1 string sentinel(s) → NaN
+    diabetes: 'Yes'/'No' → 1/0, cast to integer
+    Removed 5 row(s) with outlier/impossible values
+    Removed 3 row(s) with date/age violations: ['P005', 'P011', 'P019']
+    Removed 2 duplicate row(s) for IDs: ['P003', 'P007'] (kept first)
+    cholesterol: 4 missing value(s) flagged as MNAR — not imputed
+    Median-imputed: age(1→43.0), bmi(1→24.7)
+    gender: standardised to M/F
+    smoking_status: standardised to Never/Former/Current
+
+  LLM cleaning  (12 rows removed from 27):
+  (LLM reasoning not captured — see raw LLM output for details)
+
+======================================================================
+STEP 5 — METHOD COMPARISON
+======================================================================
+
+                                    Programmatic          LLM
+  ----------------------------------------------------------
+  Rows removed                                10           12
+  Missing values resolved                     12           15
+  Invalid values resolved                      5            5
+  Duplicates resolved                          2            2
+  Date/age violations resolved                 3            0
+  MNAR patterns resolved                       1            1
+
+======================================================================
+Exports written:
+  prog_cleaned_health_data.csv  (17 rows)
+  llm_cleaned_health_data.csv   (15 rows)
+======================================================================
+
+################################################################################
+# END OF RUN
+################################################################################
+
